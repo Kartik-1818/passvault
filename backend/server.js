@@ -119,3 +119,14 @@ const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
+
+// Fallback route to catch undefined routes
+app.use((req, res, next) => {
+  res.status(404).send("Route not found");
+});
+
+// Error handler (very important for Vercel logs!)
+app.use((err, req, res, next) => {
+  console.error("Server Error:", err);  // 👈 force logs in Vercel
+  res.status(500).send("Something went wrong");
+});
