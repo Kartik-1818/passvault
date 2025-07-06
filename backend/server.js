@@ -18,7 +18,7 @@ app.use((req, res, next) => {
 // CORS Setup
 app.use(
   cors({
-    origin: "https://passvault-pi.vercel.app ", // Replace with your frontend URL
+    origin: "https://passvault-pi.vercel.app", // Replace with your frontend URL
     methods: ["GET", "POST", "PUT", "DELETE"], // Specify allowed HTTP methods
     credentials: true, // If you need to send cookies
     allowedHeaders: ["Content-Type"],
@@ -46,6 +46,7 @@ const passwordSchema = new mongoose.Schema(
     website: { type: String, required: true },
     username: { type: String, required: true },
     password: { type: String, required: true },
+    userId : { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }
   },
   { timestamps: true }
 );
@@ -55,11 +56,11 @@ const Password = mongoose.model("Password", passwordSchema);
 // API Routes
 
 // GET all passwords
-// app.get('/', (req, res) => {
-//   res.send('About route 🎉 ')
-// })
+app.get("/", (req, res) => {
+  res.send("✅ API is running");
+});
 
-const authenticate = require("./middleware/authMiddleware");
+const authenticate = require("./middleware/authMiddlewares");
 
 app.get("/api/passwords", authenticate, async (req, res) => {
   try {
