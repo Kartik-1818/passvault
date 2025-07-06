@@ -48,19 +48,19 @@ const Password = mongoose.model("Password", passwordSchema);
 // API Routes
 
 // GET all passwords
-app.get('/', (req, res) => {
-  res.send('About route 🎉 ')
-})
+// app.get('/', (req, res) => {
+//   res.send('About route 🎉 ')
+// })
 
-// app.get("/api/passwords", async (req, res) => {
-//   try {
-//     const passwords = await Password.find().sort({ createdAt: -1 });
-//     res.json(passwords);
-//   } catch (err) {
-//     console.error("Error fetching passwords:", err);
-//     res.status(500).json({ message: "Failed to fetch passwords" });
-//   }
-// });
+app.get("/api/passwords", async (req, res) => {
+  try {
+    const passwords = await Password.find().sort({ createdAt: -1 });
+    res.json(passwords);
+  } catch (err) {
+    console.error("Error fetching passwords:", err);
+    res.status(500).json({ message: "Failed to fetch passwords" });
+  }
+});
 
 // POST new password
 app.post("/api/passwords", async (req, res) => {
