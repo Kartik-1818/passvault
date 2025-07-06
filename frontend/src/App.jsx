@@ -171,7 +171,7 @@ export default function App() {
 
   return (
     <Router>
-        <AuthPage />
+        <AuthPage isLogin={false} />
       <Routes>
         <Route path="/login" element={<AuthPage isLogin={true} />} />
         <Route path="/register" element={<AuthPage isLogin={false} />} />
