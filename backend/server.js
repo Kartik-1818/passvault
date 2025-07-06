@@ -21,7 +21,6 @@ app.use(
     origin: "https://passvault-pi.vercel.app", // Replace with your frontend URL
     methods: ["GET", "POST", "PUT", "DELETE"], // Specify allowed HTTP methods
     credentials: true, // If you need to send cookies
-    allowedHeaders: ["Content-Type"],
   })
 );
 
