@@ -9,34 +9,43 @@ const AuthPage = ({ isLogin }) => {
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!username.trim() || !password.trim()) {
-      alert("Please enter both username and password.");
-      return;
-    }
+  e.preventDefault();
+  if (!username.trim() || !password.trim()) {
+    alert("Please enter both username and password.");
+    return;
+  }
 
-    setLoading(true);
-    try {
-      const API_URL = "https://passvault-back.vercel.app "; // Remove extra spaces
-      const url = isLogin ? "/api/auth/login" : "/api/auth/register";
+  setLoading(true);
+  try {
+    const API_URL = "https://passvault-back.vercel.app";
+    const url = isLogin ? "/api/auth/login" : "/api/auth/register";
 
-      const res = await axios.post(`${API_URL}${url}`, { username, password });
+    const res = await axios.post(`${API_URL}${url}`, { username, password });
 
+    if (isLogin && res.data.token) {
       localStorage.setItem("token", res.data.token);
-      navigate("/"); // Redirect after successful login/register
-      window.location.reload(); // Reload to fetch user-specific data
-    } catch (err) {
-      const message = err.response?.data?.message ||
-        (isLogin ? "Login failed" : "Registration failed");
-      alert(message);
-    } finally {
-      setLoading(false);
+      navigate("/");
+      window.location.reload(); // Reload user-specific data
+    } else {
+      alert("Registration successful! Please log in.");
+      navigate("/login");
     }
-  };
+  } catch (err) {
+    const message =
+      err.response?.data?.message || (isLogin ? "Login failed" : "Registration failed");
+    alert(message);
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-900 text-white">
-      <form onSubmit={handleSubmit} className="bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-sm">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-sm"
+      >
         <h2 className="text-2xl mb-4">{isLogin ? "Login" : "Register"}</h2>
 
         <input
@@ -59,10 +68,18 @@ const AuthPage = ({ isLogin }) => {
 
         <button
           type="submit"
-          className={`w-full py-2 bg-blue-600 hover:bg-blue-700 rounded ${loading ? "opacity-75 cursor-not-allowed" : ""}`}
+          className={`w-full py-2 bg-blue-600 hover:bg-blue-700 rounded ${
+            loading ? "opacity-75 cursor-not-allowed" : ""
+          }`}
           disabled={loading}
         >
-          {loading ? (isLogin ? "Logging in..." : "Registering...") : isLogin ? "Login" : "Register"}
+          {loading
+            ? isLogin
+              ? "Logging in..."
+              : "Registering..."
+            : isLogin
+            ? "Login"
+            : "Register"}
         </button>
 
         <p className="mt-3 text-sm">
