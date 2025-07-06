@@ -177,8 +177,9 @@ export default function App() {
         <Route
           path="/"
           element={
-            <div className=" min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white p-4 md:p-8">
+            <div>
               <AuthPage />
+            <div className=" min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white p-4 md:p-8">
               {/* Header */}
               <header className="text-center mb-10 relative">
                 <div className="flex justify-center items-center gap-2 mb-3">
@@ -428,6 +429,7 @@ export default function App() {
                   </p>
                 </div>
               </footer>
+            </div>
             </div>
           }
         />
