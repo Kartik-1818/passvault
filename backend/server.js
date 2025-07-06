@@ -16,7 +16,7 @@ app.use((req, res, next) => {
 
 // CORS Setup
 const corsOptions = {
-  origin: 'https://your-frontend.vercel.app',// Update this to match your frontend port
+  origin: "https://vercel.com/kartik-jhambs-projects/passvault",// Update this to match your frontend port
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type"],
   credentials: true,
