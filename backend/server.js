@@ -16,7 +16,7 @@ app.use((req, res, next) => {
 
 // CORS Setup
 const corsOptions = {
-  origin: ["http://localhost:5176", "*"], // Update this to match your frontend port
+  origin: 'https://your-frontend.vercel.app' ,// Update this to match your frontend port
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type"],
   credentials: true,
