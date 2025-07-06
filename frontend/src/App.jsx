@@ -29,7 +29,7 @@ export default function App() {
   useEffect(() => {
     const fetchPasswords = async () => {
       try {
-        const res = await axios.get("http://localhost:4000/api/passwords");
+        const res = await axios.get("https://passvault-back.vercel.app/");
         setPasswords(res.data);
       } catch (err) {
         console.error(err);
@@ -49,7 +49,7 @@ export default function App() {
     try {
       if (editingIndex !== null) {
         const id = passwords[editingIndex]._id;
-        await axios.put(`http://localhost:4000/api/passwords/${id}`, {
+        await axios.put(`https://passvault-back.vercel.app//${id}`, {
           website,
           username,
           password,
@@ -64,7 +64,7 @@ export default function App() {
         };
         setPasswords(updated);
       } else {
-        const res = await axios.post("http://localhost:4000/api/passwords", {
+        const res = await axios.post("https://passvault-back.vercel.app/", {
           website,
           username,
           password,
@@ -92,7 +92,7 @@ export default function App() {
     if (window.confirm("Are you sure you want to delete this password?")) {
       try {
         const res = await fetch(
-          `http://localhost:4000/api/passwords/${idToDelete}`,
+          `https://passvault-back.vercel.app//${idToDelete}`,
           {
             method: "DELETE",
           }
