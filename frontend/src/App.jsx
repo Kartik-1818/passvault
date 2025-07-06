@@ -3,8 +3,7 @@ import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import AuthPage from "./components/AuthPage";
-
+import AuthPage from "../components/AuthPage";
 
 export default function App() {
   const [passwords, setPasswords] = useState([]);
@@ -31,77 +30,80 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-  const fetchPasswords = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      const res = await axios.get("https://passvault-back.vercel.app/api/passwords ", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setPasswords(res.data);
-    } catch (err) {
-      console.error(err);
-      showToast("Failed to load passwords", "error");
-    }
-    setIsLoading(false);
-  };
-  fetchPasswords();
-}, [showToast]);
+    const fetchPasswords = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const res = await axios.get(
+          "https://passvault-back.vercel.app/api/passwords ",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setPasswords(res.data);
+      } catch (err) {
+        console.error(err);
+        showToast("Failed to load passwords", "error");
+      }
+      setIsLoading(false);
+    };
+    fetchPasswords();
+  }, [showToast]);
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  if (!website.trim() || !username.trim() || !password.trim()) {
-    showToast("Please fill all fields", "error");
-    return;
-  }
-
-  const token = localStorage.getItem("token");
-
-  setIsSaving(true);
-  try {
-    if (editingIndex !== null) {
-      const id = passwords[editingIndex]._id;
-      await axios.put(
-        `https://passvault-back.vercel.app/api/passwords/ ${id}`,
-        { website, username, password },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      showToast("Password updated!", "success");
-      const updated = [...passwords];
-      updated[editingIndex] = {
-        ...updated[editingIndex],
-        website,
-        username,
-        password,
-      };
-      setPasswords(updated);
-    } else {
-      const res = await axios.post(
-        "https://passvault-back.vercel.app/api/passwords ",
-        { website, username, password },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      setPasswords([...passwords, res.data]);
-      showToast("New password saved!", "success");
+    if (!website.trim() || !username.trim() || !password.trim()) {
+      showToast("Please fill all fields", "error");
+      return;
     }
-    resetForm();
-  } catch (err) {
-    console.error(err);
-    showToast("Failed to save password", "error");
-  } finally {
-    setIsSaving(false);
-  }
-};
+
+    const token = localStorage.getItem("token");
+
+    setIsSaving(true);
+    try {
+      if (editingIndex !== null) {
+        const id = passwords[editingIndex]._id;
+        await axios.put(
+          `https://passvault-back.vercel.app/api/passwords/ ${id}`,
+          { website, username, password },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        showToast("Password updated!", "success");
+        const updated = [...passwords];
+        updated[editingIndex] = {
+          ...updated[editingIndex],
+          website,
+          username,
+          password,
+        };
+        setPasswords(updated);
+      } else {
+        const res = await axios.post(
+          "https://passvault-back.vercel.app/api/passwords ",
+          { website, username, password },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setPasswords([...passwords, res.data]);
+        showToast("New password saved!", "success");
+      }
+      resetForm();
+    } catch (err) {
+      console.error(err);
+      showToast("Failed to save password", "error");
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   const handleEdit = (index) => {
     const entry = passwords[index];
@@ -112,27 +114,27 @@ export default function App() {
   };
 
   const handleDelete = async (index) => {
-  const idToDelete = passwords[index]._id;
-  if (window.confirm("Are you sure you want to delete this password?")) {
-    try {
-      const token = localStorage.getItem("token");
-      await axios.delete(
-        `https://passvault-back.vercel.app/api/passwords/ ${idToDelete}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      const updated = passwords.filter((_, i) => i !== index);
-      setPasswords(updated);
-      showToast("Password deleted", "success");
-    } catch (err) {
-      console.error("Error deleting password:", err);
-      showToast("Error deleting password", "error");
+    const idToDelete = passwords[index]._id;
+    if (window.confirm("Are you sure you want to delete this password?")) {
+      try {
+        const token = localStorage.getItem("token");
+        await axios.delete(
+          `https://passvault-back.vercel.app/api/passwords/ ${idToDelete}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const updated = passwords.filter((_, i) => i !== index);
+        setPasswords(updated);
+        showToast("Password deleted", "success");
+      } catch (err) {
+        console.error("Error deleting password:", err);
+        showToast("Error deleting password", "error");
+      }
     }
-  }
-};
+  };
 
   const handleCopy = (text, index) => {
     navigator.clipboard.writeText(text).then(() => {
@@ -168,12 +170,13 @@ export default function App() {
   }, [passwords, searchTerm]);
 
   return (
-
-    
-    
-
-
+    <Router>
+  <Routes>
+    <Route path="/login" element={<AuthPage isLogin={true} />} />
+    <Route path="/register" element={<AuthPage isLogin={false} />} />
+    <Route path="/" element={
     <div className=" min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white p-4 md:p-8">
+      <AuthPage/>
       {/* Header */}
       <header className="text-center mb-10 relative">
         <div className="flex justify-center items-center gap-2 mb-3">
@@ -372,12 +375,7 @@ export default function App() {
               className="text-gray-500 hover:text-green-400 transition-colors"
               aria-label="WhatsApp"
             >
-              <svg
-                className="w-6 h-6"
-                fill="currentColor"
-                viewBox="0 0 24 24"
-                
-              >
+              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M20.52 3.48A11.77 11.77 0 0 0 12 0a11.94 11.94 0 0 0-10.3 17.9L0 24l6.28-1.65A11.9 11.9 0 0 0 12 24c6.63 0 12-5.37 12-12a11.77 11.77 0 0 0-3.48-8.52zM12 22a9.86 9.86 0 0 1-5.16-1.43l-.37-.23-3.73.98 1-3.64-.24-.38A9.88 9.88 0 0 1 2 12C2 6.49 6.49 2 12 2s10 4.49 10 10-4.49 10-10 10zm5.39-7.23c-.29-.14-1.71-.84-1.97-.93s-.46-.14-.65.15-.74.93-.91 1.12-.34.22-.63.07a8.1 8.1 0 0 1-2.39-1.47 9.05 9.05 0 0 1-1.66-2.06c-.17-.29 0-.44.13-.6.14-.14.29-.34.44-.51a2.1 2.1 0 0 0 .29-.48.56.56 0 0 0 0-.51c-.07-.14-.65-1.56-.89-2.14s-.47-.48-.65-.49h-.55a1.07 1.07 0 0 0-.78.37 3.26 3.26 0 0 0-1 2.43 5.72 5.72 0 0 0 1.19 2.81c.15.21 1.9 3 4.61 4.21a15.7 15.7 0 0 0 1.56.57 3.75 3.75 0 0 0 1.72.11c.52-.08 1.71-.7 1.95-1.38s.24-1.25.17-1.37-.27-.2-.56-.33z" />
               </svg>
             </a>
@@ -411,6 +409,9 @@ export default function App() {
         </div>
       </footer>
     </div>
+    } />
+     </Routes>
+</Router>
   );
 }
 
@@ -418,6 +419,7 @@ export default function App() {
 const PasswordCard = React.memo(
   ({ entry, index, onEdit, onDelete, onCopy, copiedIndex }) => {
     return (
+      
       <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-5 border border-gray-700 shadow-md hover:shadow-2xl hover:scale-100  transition-shadow duration-300">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
           <div className="flex items-center gap-3">
