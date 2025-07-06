@@ -15,12 +15,12 @@ app.use((req, res, next) => {
 });
 
 // CORS Setup
-const corsOptions = {
-  origin: "https://vercel.com/kartik-jhambs-projects/passvault",// Update this to match your frontend port
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+app.use(cors({
+  origin: 'https://passvault-pi.vercel.app ', // Replace with your frontend URL
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify allowed HTTP methods
+  credentials: true, // If you need to send cookies
   allowedHeaders: ["Content-Type"],
-  credentials: true,
-};
+}));
 
 app.use(cors(corsOptions));
 // app.use((req, res, next) => {
