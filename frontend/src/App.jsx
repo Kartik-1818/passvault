@@ -171,6 +171,7 @@ export default function App() {
 
   return (
     <Router>
+        <AuthPage />
       <Routes>
         <Route path="/login" element={<AuthPage isLogin={true} />} />
         <Route path="/register" element={<AuthPage isLogin={false} />} />
@@ -178,7 +179,6 @@ export default function App() {
           path="/"
           element={
             <div>
-              <AuthPage />
             <div className=" min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white p-4 md:p-8">
               {/* Header */}
               <header className="text-center mb-10 relative">
