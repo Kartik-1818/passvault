@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const authRoutes = require("./routes/auth");
 
 const app = express();
 
@@ -15,19 +16,22 @@ app.use((req, res, next) => {
 });
 
 // CORS Setup
-app.use(cors({
-  origin: 'https://passvault-pi.vercel.app ', // Replace with your frontend URL
-  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify allowed HTTP methods
-  credentials: true, // If you need to send cookies
-  allowedHeaders: ["Content-Type"],
-}));
+app.use(
+  cors({
+    origin: "https://passvault-pi.vercel.app ", // Replace with your frontend URL
+    methods: ["GET", "POST", "PUT", "DELETE"], // Specify allowed HTTP methods
+    credentials: true, // If you need to send cookies
+    allowedHeaders: ["Content-Type"],
+  })
+);
 
 //app.use(cors(corsOptions));
 // app.use((req, res, next) => {
-//   res.header("Access-Control-Allow-Credentials", true);
-//   next();
-// });
-
+  //   res.header("Access-Control-Allow-Credentials", true);
+  //   next();
+  // });
+  
+  app.use("/api/auth", authRoutes);
 // MongoDB Connection
 mongoose
   .connect(process.env.MONGO_URI, {
@@ -37,11 +41,14 @@ mongoose
   .catch((err) => console.error("❌ MongoDB connection error:", err));
 
 // Mongoose Schema & Model
-const passwordSchema = new mongoose.Schema({
-  website: { type: String, required: true },
-  username: { type: String, required: true },
-  password: { type: String, required: true },
-}, { timestamps: true });
+const passwordSchema = new mongoose.Schema(
+  {
+    website: { type: String, required: true },
+    username: { type: String, required: true },
+    password: { type: String, required: true },
+  },
+  { timestamps: true }
+);
 
 const Password = mongoose.model("Password", passwordSchema);
 
@@ -52,9 +59,13 @@ const Password = mongoose.model("Password", passwordSchema);
 //   res.send('About route 🎉 ')
 // })
 
-app.get("/api/passwords", async (req, res) => {
+const authenticate = require("./middleware/authMiddleware");
+
+app.get("/api/passwords", authenticate, async (req, res) => {
   try {
-    const passwords = await Password.find().sort({ createdAt: -1 });
+    const passwords = await Password.find({ userId: req.user.id }).sort({
+      createdAt: -1,
+    });
     res.json(passwords);
   } catch (err) {
     console.error("Error fetching passwords:", err);
@@ -62,26 +73,26 @@ app.get("/api/passwords", async (req, res) => {
   }
 });
 
-// POST new password
-app.post("/api/passwords", async (req, res) => {
+app.post("/api/passwords", authenticate, async (req, res) => {
   try {
-    console.log("📥 Incoming POST request:", req.body);
-    const newPass = new Password(req.body);
+    const newPass = new Password({ ...req.body, userId: req.user.id });
     await newPass.save();
-    console.log("✅ Password saved successfully");
     res.status(201).json(newPass);
   } catch (err) {
-    console.error("❌ Error saving password:", err);
+    console.error("Error saving password:", err);
     res.status(500).json({ message: "Failed to save password" });
   }
 });
 
 // PUT update password
-app.put("/api/passwords/:id", async (req, res) => {
+app.put("/api/passwords/:id", authenticate, async (req, res) => {
   try {
     const { id } = req.params;
-    const updated = await Password.findByIdAndUpdate(id, req.body, { new: true });
-    if (!updated) return res.status(404).json({ message: "Password not found" });
+    const updated = await Password.findByIdAndUpdate(id, req.body, {
+      new: true,
+    });
+    if (!updated)
+      return res.status(404).json({ message: "Password not found" });
     res.json(updated);
   } catch (err) {
     console.error("Error updating password:", err);
@@ -90,10 +101,11 @@ app.put("/api/passwords/:id", async (req, res) => {
 });
 
 // DELETE password
-app.delete("/api/passwords/:id", async (req, res) => {
+app.delete("/api/passwords/:id", authenticate, async (req, res) => {
   try {
     const deleted = await Password.findByIdAndDelete(req.params.id);
-    if (!deleted) return res.status(404).json({ message: "Password not found" });
+    if (!deleted)
+      return res.status(404).json({ message: "Password not found" });
     res.json({ message: "Deleted successfully" });
   } catch (err) {
     console.error("Error deleting password:", err);

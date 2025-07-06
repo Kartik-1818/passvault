@@ -2,6 +2,9 @@ import { useCallback, useState, useEffect, useMemo } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
 import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import AuthPage from "./components/AuthPage";
+
 
 export default function App() {
   const [passwords, setPasswords] = useState([]);
@@ -18,6 +21,7 @@ export default function App() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [copiedIndex, setCopiedIndex] = useState(null);
+  const [isSaving, setIsSaving] = useState(false);
 
   const showToast = useCallback((message, type = "success") => {
     setNotification({ show: true, message, type });
@@ -27,57 +31,77 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    const fetchPasswords = async () => {
-      try {
-        const res = await axios.get("https://passvault-back.vercel.app/api/passwords");
-        setPasswords(res.data);
-      } catch (err) {
-        console.error(err);
-        showToast("Failed to load passwords", "error");
-      }
-      setIsLoading(false);
-    };
-    fetchPasswords();
-  }, [showToast]);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!website.trim() || !username.trim() || !password.trim()) {
-      showToast("Please fill all fields", "error");
-      return;
-    }
+  const fetchPasswords = async () => {
     try {
-      if (editingIndex !== null) {
-        const id = passwords[editingIndex]._id;
-        await axios.put(`https://passvault-back.vercel.app/api/passwords/${id}`, {
-          website,
-          username,
-          password,
-        });
-        showToast("Password updated!", "success");
-        const updated = [...passwords];
-        updated[editingIndex] = {
-          ...updated[editingIndex],
-          website,
-          username,
-          password,
-        };
-        setPasswords(updated);
-      } else {
-        const res = await axios.post("https://passvault-back.vercel.app/api/passwords", {
-          website,
-          username,
-          password,
-        });
-        setPasswords([...passwords, res.data]);
-        showToast("New password saved!", "success");
-      }
-      resetForm();
+      const token = localStorage.getItem("token");
+      const res = await axios.get("https://passvault-back.vercel.app/api/passwords ", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setPasswords(res.data);
     } catch (err) {
       console.error(err);
-      showToast("Failed to save password", "error");
+      showToast("Failed to load passwords", "error");
     }
+    setIsLoading(false);
   };
+  fetchPasswords();
+}, [showToast]);
+
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  if (!website.trim() || !username.trim() || !password.trim()) {
+    showToast("Please fill all fields", "error");
+    return;
+  }
+
+  const token = localStorage.getItem("token");
+
+  setIsSaving(true);
+  try {
+    if (editingIndex !== null) {
+      const id = passwords[editingIndex]._id;
+      await axios.put(
+        `https://passvault-back.vercel.app/api/passwords/ ${id}`,
+        { website, username, password },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      showToast("Password updated!", "success");
+      const updated = [...passwords];
+      updated[editingIndex] = {
+        ...updated[editingIndex],
+        website,
+        username,
+        password,
+      };
+      setPasswords(updated);
+    } else {
+      const res = await axios.post(
+        "https://passvault-back.vercel.app/api/passwords ",
+        { website, username, password },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setPasswords([...passwords, res.data]);
+      showToast("New password saved!", "success");
+    }
+    resetForm();
+  } catch (err) {
+    console.error(err);
+    showToast("Failed to save password", "error");
+  } finally {
+    setIsSaving(false);
+  }
+};
 
   const handleEdit = (index) => {
     const entry = passwords[index];
@@ -88,25 +112,27 @@ export default function App() {
   };
 
   const handleDelete = async (index) => {
-    const idToDelete = passwords[index]._id;
-    if (window.confirm("Are you sure you want to delete this password?")) {
-      try {
-        const res = await fetch(
-          `https://passvault-back.vercel.app/api/passwords/${idToDelete}`,
-          {
-            method: "DELETE",
-          }
-        );
-        if (!res.ok) throw new Error("Failed to delete");
-        const updated = passwords.filter((_, i) => i !== index);
-        setPasswords(updated);
-        showToast("Password deleted", "success");
-      } catch (err) {
-        console.error(err);
-        showToast("Error deleting password", "error");
-      }
+  const idToDelete = passwords[index]._id;
+  if (window.confirm("Are you sure you want to delete this password?")) {
+    try {
+      const token = localStorage.getItem("token");
+      await axios.delete(
+        `https://passvault-back.vercel.app/api/passwords/ ${idToDelete}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const updated = passwords.filter((_, i) => i !== index);
+      setPasswords(updated);
+      showToast("Password deleted", "success");
+    } catch (err) {
+      console.error("Error deleting password:", err);
+      showToast("Error deleting password", "error");
     }
-  };
+  }
+};
 
   const handleCopy = (text, index) => {
     navigator.clipboard.writeText(text).then(() => {
@@ -142,6 +168,11 @@ export default function App() {
   }, [passwords, searchTerm]);
 
   return (
+
+    
+    
+
+
     <div className=" min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white p-4 md:p-8">
       {/* Header */}
       <header className="text-center mb-10 relative">
