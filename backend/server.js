@@ -16,17 +16,17 @@ app.use((req, res, next) => {
 
 // CORS Setup
 const corsOptions = {
-  origin: 'https://your-frontend.vercel.app' ,// Update this to match your frontend port
+  origin: 'https://your-frontend.vercel.app',// Update this to match your frontend port
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type"],
   credentials: true,
 };
 
 app.use(cors(corsOptions));
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Credentials", true);
-  next();
-});
+// app.use((req, res, next) => {
+//   res.header("Access-Control-Allow-Credentials", true);
+//   next();
+// });
 
 // MongoDB Connection
 mongoose
