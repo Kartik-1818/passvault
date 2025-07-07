@@ -46,7 +46,7 @@ const AuthPage = ({ isLogin }) => {
         className="w-full max-w-md bg-gray-800/60 backdrop-blur-md p-8 rounded-2xl shadow-2xl border border-gray-700"
       >
         <h2 className="text-3xl font-extrabold text-center mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
-          {isLogin ? "Welcome Back 👋" : "Create an Account"}
+          {isLogin ? "Welcome To <PassVault> 👋"  : "Create an Account"}
         </h2>
 
         <div className="mb-4">
