@@ -166,22 +166,24 @@ const Homepage = () => {
     } finally {
       setIsSaving(false);
     }
+  };
+  const navigate = useNavigate();
 
-};
-const navigate = useNavigate();
-
-const handleLogout = () => {
-  localStorage.removeItem("token");
-  showToast("Logged out successfully!", "success");
-  setTimeout(() => {
-    navigate("/login");
-  }, 1500);
-};
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    showToast("Logged out successfully!", "success");
+    setTimeout(() => {
+      navigate("/login");
+    }, 1500);
+  };
   return (
     <div className=" min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white p-4 md:p-8">
       {/* Header */}
       <header className="text-center mb-10 relative">
         <div className="flex justify-center items-center gap-2 mb-3">
+            <div>
+                
+            </div>
           <span className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
             &lt;
           </span>
@@ -191,12 +193,14 @@ const handleLogout = () => {
           <span className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
             /&gt;
           </span>
-          <button
-            onClick={handleLogout}
-            className="bg-red-400 hover:bg-red-500 text-white px-4 py-2 rounded-lg transition-all duration-300 right-2"
-          >
-            Logout
-          </button>
+          <div>
+            <button
+              onClick={handleLogout}
+              className="bg-red-400 hover:bg-red-500 text-white px-4 py-2 rounded-lg transition-all duration-300 right-2"
+            >
+              Logout
+            </button>
+          </div>
         </div>
         <p className="text-gray-300 mt-2">
           Store, manage, and secure all your passwords in one place
