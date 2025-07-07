@@ -180,37 +180,36 @@ const Homepage = () => {
     <div className=" min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white p-4 md:p-8">
       {/* Header */}
       <header className="mb-10 px-4">
-  <div className="flex items-center justify-between md:justify-center relative h-16">
-    {/* PassVault Logo - Left on mobile, center on md+ */}
-    <div className="flex items-center gap-2 md:absolute md:left-1/2 md:transform md:-translate-x-1/2">
-      <span className="text-2xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
-        &lt;
-      </span>
-      <span className="text-2xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
-        PassVault
-      </span>
-      <span className="text-2xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
-        /&gt;
-      </span>
-    </div>
+        <div className="flex items-center justify-between md:justify-center relative h-16">
+          {/* PassVault Logo - Left on mobile, center on md+ */}
+          <div className="flex items-center gap-2 md:absolute md:left-1/2 md:transform md:-translate-x-1/2">
+            <span className="text-2xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
+              &lt;
+            </span>
+            <span className="text-2xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
+              PassVault
+            </span>
+            <span className="text-2xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
+              /&gt;
+            </span>
+          </div>
 
-    {/* Logout Button - Always on right */}
-    <div>
-      <button
-        onClick={handleLogout}
-        className="bg-red-500 hover:bg-red-600 text-white text-sm md:text-base px-3 md:px-4 py-2 rounded-lg transition-all duration-300"
-      >
-        Logout
-      </button>
-    </div>
-  </div>
+          {/* Logout Button - Always on right */}
+          <div>
+            <button
+              onClick={handleLogout}
+              className="bg-red-500 hover:bg-red-600 text-white text-sm md:text-base px-3 md:px-4 py-2 rounded-lg transition-all duration-300"
+            >
+              Logout
+            </button>
+          </div>
+        </div>
 
-  {/* Subtitle below */}
-  <p className="text-center text-gray-300 text-sm md:text-base mt-2">
-    Store, manage, and secure all your passwords in one place
-  </p>
-</header>
-
+        {/* Subtitle below */}
+        <p className="text-center text-gray-300 text-sm md:text-base mt-2">
+          Store, manage, and secure all your passwords in one place
+        </p>
+      </header>
 
       {/* Notification Toast */}
       {notification.show && (
@@ -420,8 +419,8 @@ const Homepage = () => {
               </svg>
             </a>
           </div>
-          <p className="text-sm text-gray-500">
-            Made with ❤️ using React, TailwindCSS, and MongoDB Atlas
+          <p className="text-sm text-gray-500 text-center">
+            Made with ❤️
           </p>
         </div>
       </footer>
