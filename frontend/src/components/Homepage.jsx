@@ -167,16 +167,16 @@ const Homepage = () => {
       setIsSaving(false);
     }
 
-    const navigate = useNavigate();
+};
+const navigate = useNavigate();
 
-    const handleLogout = () => {
-      localStorage.removeItem("token");
-      showToast("Logged out successfully!", "success");
-      setTimeout(() => {
-        navigate("/login");
-      }, 1500);
-    };
-  };
+const handleLogout = () => {
+  localStorage.removeItem("token");
+  showToast("Logged out successfully!", "success");
+  setTimeout(() => {
+    navigate("/login");
+  }, 1500);
+};
   return (
     <div className=" min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white p-4 md:p-8">
       {/* Header */}
