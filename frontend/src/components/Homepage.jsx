@@ -182,7 +182,7 @@ const Homepage = () => {
       <header className="text-center mb-10 relative">
         <div className="flex justify-center items-center gap-2 mb-3">
             <div>
-                
+
             </div>
           <span className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
             &lt;
