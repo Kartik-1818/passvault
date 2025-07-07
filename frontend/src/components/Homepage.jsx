@@ -179,30 +179,31 @@ const Homepage = () => {
   return (
     <div className=" min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white p-4 md:p-8">
       {/* Header */}
-      <header className="text-center mb-10 relative">
-        <div className="flex justify-center items-center gap-2 mb-3">
-            <div>
-
-            </div>
-          <span className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
-            &lt;
-          </span>
-          <span className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
-            PassVault
-          </span>
-          <span className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
-            /&gt;
-          </span>
-          <div>
-            <button
-              onClick={handleLogout}
-              className="bg-red-400 hover:bg-red-500 text-white px-4 py-2 rounded-lg transition-all duration-300 right-2"
-            >
-              Logout
-            </button>
+      <header className="relative mb-10">
+        <div className="relative flex items-center justify-center">
+          {/* Centered Logo */}
+          <div className="flex items-center gap-2">
+            <span className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
+              &lt;
+            </span>
+            <span className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
+              PassVault
+            </span>
+            <span className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
+              /&gt;
+            </span>
           </div>
+
+          {/* Right-Aligned Logout */}
+          <button
+            onClick={handleLogout}
+            className="absolute right-0 bg-red-400 hover:bg-red-500 text-white px-4 py-2 rounded-lg transition-all duration-300"
+          >
+            Logout
+          </button>
         </div>
-        <p className="text-gray-300 mt-2">
+
+        <p className="text-center text-gray-300 mt-2">
           Store, manage, and secure all your passwords in one place
         </p>
       </header>
