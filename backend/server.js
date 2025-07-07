@@ -2,7 +2,8 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const authRoutes = require("./routes/auth");
-
+// Start Server
+const PORT = process.env.PORT || 4000;
 const app = express();
 
 require("dotenv").config();
@@ -113,8 +114,7 @@ app.delete("/api/passwords/:id", authenticate, async (req, res) => {
   }
 });
 
-// Start Server
-const PORT = process.env.PORT || 4000;
+
 
 // Fallback route to catch undefined routes
 app.use((req, res, next) => {
