@@ -2,6 +2,7 @@ import React from "react";
 import { useCallback, useState, useEffect, useMemo } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Homepage = () => {
   const [passwords, setPasswords] = useState([]);
@@ -165,6 +166,16 @@ const Homepage = () => {
     } finally {
       setIsSaving(false);
     }
+
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+      localStorage.removeItem("token");
+      showToast("Logged out successfully!", "success");
+      setTimeout(() => {
+        navigate("/login");
+      }, 1500);
+    };
   };
   return (
     <div className=" min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white p-4 md:p-8">
@@ -180,14 +191,16 @@ const Homepage = () => {
           <span className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
             /&gt;
           </span>
-          <button>
-            logout
-        </button>
+          <button
+            onClick={handleLogout}
+            className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-all duration-300"
+          >
+            Logout
+          </button>
         </div>
         <p className="text-gray-300 mt-2">
           Store, manage, and secure all your passwords in one place
         </p>
-        
       </header>
 
       {/* Notification Toast */}
