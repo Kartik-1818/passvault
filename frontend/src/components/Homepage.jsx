@@ -18,7 +18,7 @@ const handleSubmit = async (e) => {
     if (editingIndex !== null) {
       const id = passwords[editingIndex]._id;
       await axios.put(
-        `https://passvault-back.vercel.app/api/passwords/${id}`,
+        `https://passvault-4blr.onrender.com/api/passwords/${id}`,
         { website, username, password },
         {
           headers: {
@@ -37,7 +37,7 @@ const handleSubmit = async (e) => {
       setPasswords(updated);
     } else {
       const res = await axios.post(
-        "https://passvault-back.vercel.app/api/passwords",
+        "https://passvault-4blr.onrender.com/api/passwords",
         { website, username, password },
         {
           headers: {
@@ -71,7 +71,7 @@ const handleDelete = async (index) => {
     try {
       const token = localStorage.getItem("token");
       await axios.delete(
-        `https://passvault-back.vercel.app/api/passwords/${idToDelete}`,
+        `https://passvault-4blr.onrender.com/api/passwords/${idToDelete}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -142,7 +142,7 @@ useEffect(() => {
     try {
       const token = localStorage.getItem("token");
       const res = await axios.get(
-        "https://passvault-back.vercel.app/api/passwords",
+        "https://passvault-4blr.onrender.com/api/passwords",
         {
           headers: {
             Authorization: `Bearer ${token}`,

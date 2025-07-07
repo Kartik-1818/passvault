@@ -17,7 +17,7 @@ const AuthPage = ({ isLogin }) => {
 
   setLoading(true);
   try {
-    const API_URL = "https://passvault-back.vercel.app";
+    const API_URL = "https://passvault-4blr.onrender.com";
     const url = isLogin ? "/api/auth/login" : "/api/auth/register";
 
     const res = await axios.post(`${API_URL}${url}`, { username, password });
