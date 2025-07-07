@@ -419,7 +419,7 @@ const Homepage = () => {
               </svg>
             </a>
           </div>
-          <p className="text-sm text-gray-500 text-center">Made with ❤️</p>
+          <p className="text-sm text-gray-500">Made with ❤️</p>
         </div>
       </footer>
     </div>
