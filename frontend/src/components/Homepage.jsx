@@ -193,7 +193,7 @@ const handleLogout = () => {
           </span>
           <button
             onClick={handleLogout}
-            className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-all duration-300"
+            className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-all duration-300 right-2"
           >
             Logout
           </button>
