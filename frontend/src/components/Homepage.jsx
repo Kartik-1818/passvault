@@ -3,59 +3,63 @@ import { useCallback, useState, useEffect, useMemo } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
 
-  if (!website.trim() || !username.trim() || !password.trim()) {
-    showToast("Please fill all fields", "error");
-    return;
-  }
 
-  const token = localStorage.getItem("token");
 
-  setIsSaving(true);
-  try {
-    if (editingIndex !== null) {
-      const id = passwords[editingIndex]._id;
-      await axios.put(
-        `https://passvault-4blr.onrender.com/api/passwords/${id}`,
-        { website, username, password },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      showToast("Password updated!", "success");
-      const updated = [...passwords];
-      updated[editingIndex] = {
-        ...updated[editingIndex],
-        website,
-        username,
-        password,
-      };
-      setPasswords(updated);
-    } else {
-      const res = await axios.post(
+const Homepage = () => {
+  const [passwords, setPasswords] = useState([]);
+  const [website, setWebsite] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [editingIndex, setEditingIndex] = useState(null);
+  const [notification, setNotification] = useState({
+    show: false,
+    message: "",
+    type: "",
+  });
+  const [searchTerm, setSearchTerm] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [copiedIndex, setCopiedIndex] = useState(null);
+  const [isSaving, setIsSaving] = useState(false);
+
+  const showToast = useCallback((message, type = "success") => {
+  setNotification({ show: true, message, type });
+  setTimeout(() => {
+    setNotification({ show: false, message: "", type: "" });
+  }, 2000);
+}, []);
+
+useEffect(() => {
+  const fetchPasswords = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const res = await axios.get(
         "https://passvault-4blr.onrender.com/api/passwords",
-        { website, username, password },
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
-      setPasswords([...passwords, res.data]);
-      showToast("New password saved!", "success");
+      setPasswords(res.data);
+    } catch (err) {
+      console.error(err);
+      showToast("Failed to load passwords", "error");
     }
-    resetForm();
-  } catch (err) {
-    console.error(err);
-    showToast("Failed to save password", "error");
-  } finally {
-    setIsSaving(false);
-  }
-};
+    setIsLoading(false);
+  };
+  fetchPasswords();
+}, [showToast]);
+
+    const filteredPasswords = useMemo(() => {
+  return passwords.filter(
+    (entry) =>
+      entry.website.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      entry.username.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+}, [passwords, searchTerm]);
+
 
 const handleEdit = (index) => {
   const entry = passwords[index];
@@ -113,59 +117,59 @@ const resetForm = () => {
   setEditingIndex(null);
 };
 
-const Homepage = () => {
-  const [passwords, setPasswords] = useState([]);
-  const [website, setWebsite] = useState("");
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [editingIndex, setEditingIndex] = useState(null);
-  const [notification, setNotification] = useState({
-    show: false,
-    message: "",
-    type: "",
-  });
-  const [searchTerm, setSearchTerm] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [copiedIndex, setCopiedIndex] = useState(null);
-  const [isSaving, setIsSaving] = useState(false);
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-  const showToast = useCallback((message, type = "success") => {
-  setNotification({ show: true, message, type });
-  setTimeout(() => {
-    setNotification({ show: false, message: "", type: "" });
-  }, 2000);
-}, []);
+  if (!website.trim() || !username.trim() || !password.trim()) {
+    showToast("Please fill all fields", "error");
+    return;
+  }
 
-useEffect(() => {
-  const fetchPasswords = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      const res = await axios.get(
-        "https://passvault-4blr.onrender.com/api/passwords",
+  const token = localStorage.getItem("token");
+
+  setIsSaving(true);
+  try {
+    if (editingIndex !== null) {
+      const id = passwords[editingIndex]._id;
+      await axios.put(
+        `https://passvault-4blr.onrender.com/api/passwords/${id}`,
+        { website, username, password },
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
-      setPasswords(res.data);
-    } catch (err) {
-      console.error(err);
-      showToast("Failed to load passwords", "error");
+      showToast("Password updated!", "success");
+      const updated = [...passwords];
+      updated[editingIndex] = {
+        ...updated[editingIndex],
+        website,
+        username,
+        password,
+      };
+      setPasswords(updated);
+    } else {
+      const res = await axios.post(
+        "https://passvault-4blr.onrender.com/api/passwords",
+        { website, username, password },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setPasswords([...passwords, res.data]);
+      showToast("New password saved!", "success");
     }
-    setIsLoading(false);
-  };
-  fetchPasswords();
-}, [showToast]);
-
-    const filteredPasswords = useMemo(() => {
-  return passwords.filter(
-    (entry) =>
-      entry.website.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      entry.username.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-}, [passwords, searchTerm]);
+    resetForm();
+  } catch (err) {
+    console.error(err);
+    showToast("Failed to save password", "error");
+  } finally {
+    setIsSaving(false);
+  }
+};
   return (
     <div className=" min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white p-4 md:p-8">
       {/* Header */}
