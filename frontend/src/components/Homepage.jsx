@@ -180,8 +180,8 @@ const Homepage = () => {
     <div className=" min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white p-4 md:p-8">
       {/* Header */}
       <header className="mb-10 px-4">
-        <div className="flex items-center justify-between md:justify-center relative h-16">
-          {/* PassVault Logo - Left on mobile, center on md+ */}
+        <div className="relative h-16 flex items-center justify-between md:justify-center">
+          {/* Logo - Left on mobile, centered on md+ */}
           <div className="flex items-center gap-2 md:absolute md:left-1/2 md:transform md:-translate-x-1/2">
             <span className="text-2xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
               &lt;
@@ -194,8 +194,8 @@ const Homepage = () => {
             </span>
           </div>
 
-          {/* Logout Button - Always on right */}
-          <div>
+          {/* Logout - always top-right */}
+          <div className="absolute right-0">
             <button
               onClick={handleLogout}
               className="bg-red-500 hover:bg-red-600 text-white text-sm md:text-base px-3 md:px-4 py-2 rounded-lg transition-all duration-300"
@@ -205,7 +205,6 @@ const Homepage = () => {
           </div>
         </div>
 
-        {/* Subtitle below */}
         <p className="text-center text-gray-300 text-sm md:text-base mt-2">
           Store, manage, and secure all your passwords in one place
         </p>
@@ -376,9 +375,7 @@ const Homepage = () => {
             &copy; {new Date().getFullYear()} PassVault — Securely manage your
             passwords.
           </p>
-          <p className="text-gray-400 mb-4">
-            Contact makers at
-          </p>
+          <p className="text-gray-400 mb-4">Contact makers at</p>
           <div className="flex justify-center gap-6 mb-4">
             <a
               href="https://github.com/Kartik-1818"
