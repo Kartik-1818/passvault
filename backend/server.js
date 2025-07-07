@@ -19,7 +19,9 @@ app.use((req, res, next) => {
 // CORS Setup
 app.use(
   cors({
-    origin: "https://vault-blond.vercel.app", // Replace with your frontend URL
+    origin:[ "https://vault-blond.vercel.app", // Replace with your frontend URL
+     "https://vault-blond.vercel.app", // ✅ your current frontend
+  "https://passvault-pi.vercel.app"],// optional if still used
     methods: ["GET", "POST", "PUT", "DELETE"], // Specify allowed HTTP methods
     credentials: true, // If you need to send cookies
   })
