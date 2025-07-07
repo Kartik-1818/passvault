@@ -126,3 +126,8 @@ app.use((err, req, res, next) => {
   console.error("Server Error:", err);  // 👈 force logs in Vercel
   res.status(500).send("Something went wrong");
 });
+
+
+app.listen(PORT, () => {
+  console.log(`🚀 Server running at http://localhost:${PORT}`);
+});
