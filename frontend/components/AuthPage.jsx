@@ -9,88 +9,89 @@ const AuthPage = ({ isLogin }) => {
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  if (!username.trim() || !password.trim()) {
-    alert("Please enter both username and password.");
-    return;
-  }
-
-  setLoading(true);
-  try {
-    const API_URL = "https://passvault-4blr.onrender.com";
-    const url = isLogin ? "/api/auth/login" : "/api/auth/register";
-
-    const res = await axios.post(`${API_URL}${url}`, { username, password });
-
-    if (isLogin && res.data.token) {
-      localStorage.setItem("token", res.data.token);
-      navigate("/");
-      window.location.reload(); // Reload user-specific data
-    } else {
-      alert("Registration successful! Please log in.");
-      navigate("/login");
+    e.preventDefault();
+    if (!username.trim() || !password.trim()) {
+      alert("Please enter both username and password.");
+      return;
     }
-  } catch (err) {
-    const message =
-      err.response?.data?.message || (isLogin ? "Login failed" : "Registration failed");
-    alert(message);
-  } finally {
-    setLoading(false);
-  }
-};
 
+    setLoading(true);
+    try {
+      const API_URL = "https://passvault-4blr.onrender.com";
+      const url = isLogin ? "/api/auth/login" : "/api/auth/register";
+
+      const res = await axios.post(`${API_URL}${url}`, { username, password });
+
+      if (isLogin && res.data.token) {
+        localStorage.setItem("token", res.data.token);
+        navigate("/");
+        window.location.reload();
+      } else {
+        alert("Registration successful! Please log in.");
+        navigate("/login");
+      }
+    } catch (err) {
+      const message =
+        err.response?.data?.message || (isLogin ? "Login failed" : "Registration failed");
+      alert(message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-900 text-white">
+    <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white px-4">
       <form
         onSubmit={handleSubmit}
-        className="bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-sm"
+        className="w-full max-w-md bg-gray-800/60 backdrop-blur-md p-8 rounded-2xl shadow-2xl border border-gray-700"
       >
-        <h2 className="text-2xl mb-4">{isLogin ? "Login" : "Register"}</h2>
+        <h2 className="text-3xl font-extrabold text-center mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
+          {isLogin ? "Welcome Back 👋" : "Create an Account"}
+        </h2>
 
-        <input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          className="w-full p-2 mb-3 rounded bg-gray-700"
-          required
-        />
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-1">Username</label>
+          <input
+            type="text"
+            placeholder="Enter username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            className="w-full px-4 py-2 rounded-lg bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required
+          />
+        </div>
 
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="w-full p-2 mb-3 rounded bg-gray-700"
-          required
-        />
+        <div className="mb-6">
+          <label className="block text-sm font-medium mb-1">Password</label>
+          <input
+            type="password"
+            placeholder="Enter password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full px-4 py-2 rounded-lg bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-purple-500"
+            required
+          />
+        </div>
 
         <button
           type="submit"
-          className={`w-full py-2 bg-blue-600 hover:bg-blue-700 rounded ${
-            loading ? "opacity-75 cursor-not-allowed" : ""
+          className={`w-full py-2 rounded-lg font-semibold text-white bg-gradient-to-r from-blue-500 to-purple-600 hover:opacity-90 transition-all duration-300 ${
+            loading ? "opacity-60 cursor-not-allowed" : ""
           }`}
           disabled={loading}
         >
-          {loading
-            ? isLogin
-              ? "Logging in..."
-              : "Registering..."
-            : isLogin
-            ? "Login"
-            : "Register"}
+          {loading ? (isLogin ? "Logging in..." : "Registering...") : isLogin ? "Login" : "Register"}
         </button>
 
-        <p className="mt-3 text-sm">
+        <p className="mt-4 text-center text-sm text-gray-300">
           {isLogin ? "Don't have an account?" : "Already have an account?"}
-          <a
-            href="#"
+          <button
+            type="button"
             onClick={() => navigate(isLogin ? "/register" : "/login")}
-            className="text-blue-400 ml-1"
+            className="ml-2 text-blue-400 hover:underline"
           >
             {isLogin ? "Register" : "Login"}
-          </a>
+          </button>
         </p>
       </form>
     </div>
