@@ -6,7 +6,7 @@ const User = require("../models/user.js");
 const router = express.Router();
 
 // Register
-router.post("/register", async (req, res) => {
+router.post("/api/auth/register", async (req, res) => {
   const { username, password } = req.body;
   try {
     const existingUser = await User.findOne({ username });
@@ -22,7 +22,7 @@ router.post("/register", async (req, res) => {
 });
 
 // Login
-router.post("/login", async (req, res) => {
+router.post("/api/auth/login", async (req, res) => {
   const { username, password } = req.body;
   try {
     const user = await User.findOne({ username });
