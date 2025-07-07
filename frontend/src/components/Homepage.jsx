@@ -376,7 +376,7 @@ const Homepage = () => {
             &copy; {new Date().getFullYear()} PassVault — Securely manage your
             passwords.
           </p>
-          <p>
+          <p className="text-gray-400 mb-4">
             Contact makers at
           </p>
           <div className="flex justify-center gap-6 mb-4">
