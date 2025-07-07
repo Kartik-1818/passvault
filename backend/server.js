@@ -59,7 +59,7 @@ app.get("/", (req, res) => {
   res.send("✅ API is running");
 });
 
-const authenticate = require("./middleware/authMiddlewares");
+const authenticate = require("./middleware/authmiddlewares");
 
 app.get("/api/passwords", authenticate, async (req, res) => {
   try {
