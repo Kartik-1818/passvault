@@ -24,15 +24,15 @@ const AuthPage = ({ isLogin }) => {
 
       if (isLogin && res.data.token) {
         localStorage.setItem("token", res.data.token);
-        navigate("/");
-        window.location.reload();
+        navigate("/"); // ✅ just navigate
       } else {
         alert("Registration successful! Please log in.");
         navigate("/login");
       }
     } catch (err) {
       const message =
-        err.response?.data?.message || (isLogin ? "Login failed" : "Registration failed");
+        err.response?.data?.message ||
+        (isLogin ? "Login failed" : "Registration failed");
       alert(message);
     } finally {
       setLoading(false);
@@ -46,7 +46,7 @@ const AuthPage = ({ isLogin }) => {
         className="w-full max-w-md bg-gray-800/60 backdrop-blur-md p-8 rounded-2xl shadow-2xl border border-gray-700"
       >
         <h2 className="text-3xl font-extrabold text-center mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
-          {isLogin ? "Welcome To Vault 🔒 ":"Create an Account"}
+          {isLogin ? "Welcome To Vault 🔒 " : "Create an Account"}
         </h2>
 
         <div className="mb-4">
@@ -80,7 +80,13 @@ const AuthPage = ({ isLogin }) => {
           }`}
           disabled={loading}
         >
-          {loading ? (isLogin ? "Logging in..." : "Registering...") : isLogin ? "Login" : "Register"}
+          {loading
+            ? isLogin
+              ? "Logging in..."
+              : "Registering..."
+            : isLogin
+            ? "Login"
+            : "Register"}
         </button>
 
         <p className="mt-4 text-center text-sm text-gray-300">
