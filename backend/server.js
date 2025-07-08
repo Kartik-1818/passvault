@@ -8,7 +8,7 @@ const app = express();
 
 require("dotenv").config();
 // Middleware
-app.use(express.json());
+
 
 // Logger middleware
 app.use((req, res, next) => {
@@ -17,14 +17,17 @@ app.use((req, res, next) => {
 });
 
 // CORS Setup
-app.use(
-  cors({
-    origin:[ "https://vault-blond.vercel.app",
-  "https://passvault-pi.vercel.app"],// optional if still used
-    methods: ["GET", "POST", "PUT", "DELETE"], // Specify allowed HTTP methods
-    credentials: true, // If you need to send cookies
-  })
-);
+const corsOptions = {
+  origin: [
+    "https://vault-blond.vercel.app",
+    "https://passvault-pi.vercel.app"
+  ],
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE"]
+};
+
+// ✅ Apply this one middleware
+app.use(cors(corsOptions));
 
 //app.use(cors(corsOptions));
 app.use((req, res, next) => {
@@ -32,6 +35,7 @@ app.use((req, res, next) => {
     next();
   });
 
+  app.use(express.json());
   app.use("/api/auth", authRoutes);
 // MongoDB Connection
 mongoose
