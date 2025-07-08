@@ -5,14 +5,16 @@ import Homepage from "./components/Homepage";
 import toast, { Toaster } from "react-hot-toast";
 
 export default function App() {
-  const [token, setToken] = useState(null);
+  // Load token from localStorage directly
+  const [token, setToken] = useState(() => localStorage.getItem("token"));
 
   useEffect(() => {
+    // Sync state on mount in case of refresh
     const savedToken = localStorage.getItem("token");
-    if (savedToken) {
+    if (savedToken && !token) {
       setToken(savedToken);
     }
-  }, []);
+  }, [token]);
 
   return (
     <>
