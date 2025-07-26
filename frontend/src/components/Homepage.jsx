@@ -173,6 +173,7 @@ const Homepage = () => {
     localStorage.removeItem("token");
     showToast("Logged out successfully!", "success");
     setToken(null)
+    navigate("/login")
   };
   return (
     <div className=" min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white p-4 md:p-8">
