@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
-const AuthPage = ({ isLogin }) => {
+const AuthPage = ({ isLogin, setToken }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -18,28 +18,36 @@ const AuthPage = ({ isLogin }) => {
 
     setLoading(true);
     try {
-      const API_URL = "https://passvault-4blr.onrender.com";
+      const API_URL = "https://passvault-4blr.onrender.com"; // Or use env: import.meta.env.VITE_API_URL
       const url = isLogin ? "/api/auth/login" : "/api/auth/register";
 
       const res = await axios.post(`${API_URL}${url}`, { username, password });
 
-      if (isLogin && res.data.token) {
-        localStorage.setItem("token", res.data.token);
-        toast.success("Login successful!");
-        navigate("/");
+      if (isLogin) {
+        if (res.data.token) {
+          localStorage.setItem("token", res.data.token);
+          setToken(res.data.token); // ✅ Update state
+          toast.success("Login successful!");
+          navigate("/");
+        } else {
+          toast.error("No token received.");
+        }
       } else {
         toast.success("Registration successful! Please log in.");
-        navigate("/login")
+        navigate("/login");
       }
     } catch (err) {
       const message =
         err.response?.data?.message ||
+        err.response?.data?.error ||
         (isLogin ? "Login failed" : "Registration failed");
       toast.error(message);
     } finally {
       setLoading(false);
     }
   };
+
+  const toggleAuth = () => navigate(isLogin ? "/register" : "/login");
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white px-4">
@@ -73,7 +81,7 @@ const AuthPage = ({ isLogin }) => {
         )}
 
         <h2 className="text-3xl font-extrabold text-center mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
-          {isLogin ? "Welcome To Vault 🔒 " : "Create an Account"}
+          {isLogin ? "Welcome To Vault 🔒" : "Create an Account"}
         </h2>
 
         <div className="mb-4">
@@ -83,6 +91,7 @@ const AuthPage = ({ isLogin }) => {
             placeholder="Enter username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
+            autoFocus
             className="w-full px-4 py-2 rounded-lg bg-gray-700 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
             required
           />
@@ -120,7 +129,7 @@ const AuthPage = ({ isLogin }) => {
           {isLogin ? "Don't have an account?" : "Already have an account?"}
           <button
             type="button"
-            onClick={() => navigate(isLogin ? "/register" : "/login")}
+            onClick={toggleAuth}
             className="ml-2 text-blue-400 hover:underline"
           >
             {isLogin ? "Register" : "Login"}
