@@ -5,11 +5,9 @@ import Homepage from "./components/Homepage";
 import toast, { Toaster } from "react-hot-toast";
 
 export default function App() {
-  // Load token from localStorage directly
   const [token, setToken] = useState(() => localStorage.getItem("token"));
 
   useEffect(() => {
-    // Sync state on mount in case of refresh
     const savedToken = localStorage.getItem("token");
     if (savedToken && !token) {
       setToken(savedToken);
@@ -21,13 +19,17 @@ export default function App() {
       <Toaster position="top-center" />
       <Router>
         <Routes>
-          <Route path="/login" element={<AuthPage isLogin={true} />} />
-          <Route path="/register" element={<AuthPage isLogin={false} />} />
+          <Route
+            path="/login"
+            element={<AuthPage isLogin={true} setToken={setToken} />}
+          />
+          <Route
+            path="/register"
+            element={<AuthPage isLogin={false} setToken={setToken} />}
+          />
           <Route
             path="/"
-            element={
-              token ? <Homepage /> : <Navigate to="/login" />
-            }
+            element={token ? <Homepage setToken={setToken} /> : <Navigate to="/login" />}
           />
         </Routes>
       </Router>
