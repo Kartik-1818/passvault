@@ -24,7 +24,7 @@ const AuthPage = ({ isLogin }) => {
 
       if (isLogin && res.data.token) {
         localStorage.setItem("token", res.data.token);
-        navigate("/"); // ✅ just navigate
+        navigate("/");
       } else {
         alert("Registration successful! Please log in.");
         navigate("/login");
