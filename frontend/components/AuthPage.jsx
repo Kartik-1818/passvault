@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const AuthPage = ({ isLogin }) => {
   const [username, setUsername] = useState("");
@@ -11,7 +12,7 @@ const AuthPage = ({ isLogin }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!username.trim() || !password.trim()) {
-      alert("Please enter both username and password.");
+      toast.error("Please enter both username and password.");
       return;
     }
 
@@ -24,16 +25,17 @@ const AuthPage = ({ isLogin }) => {
 
       if (isLogin && res.data.token) {
         localStorage.setItem("token", res.data.token);
-        navigate("/");
+        toast.success("Login successful!");
+        setTimeout(() => navigate("/"), 1000);
       } else {
-        alert("Registration successful! Please log in.");
-        navigate("/login");
+        toast.success("Registration successful! Please log in.");
+        setTimeout(() => navigate("/login"), 1000);
       }
     } catch (err) {
       const message =
         err.response?.data?.message ||
         (isLogin ? "Login failed" : "Registration failed");
-      alert(message);
+      toast.error(message);
     } finally {
       setLoading(false);
     }
@@ -43,8 +45,33 @@ const AuthPage = ({ isLogin }) => {
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white px-4">
       <form
         onSubmit={handleSubmit}
-        className="w-full max-w-md bg-gray-800/60 backdrop-blur-md p-8 rounded-2xl shadow-2xl border border-gray-700"
+        className="relative w-full max-w-md bg-gray-800/60 backdrop-blur-md p-8 rounded-2xl shadow-2xl border border-gray-700"
       >
+        {loading && (
+          <div className="absolute inset-0 flex items-center justify-center bg-black/40 rounded-2xl z-10">
+            <svg
+              className="animate-spin h-8 w-8 text-purple-400"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+              />
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8v8H4z"
+              />
+            </svg>
+          </div>
+        )}
+
         <h2 className="text-3xl font-extrabold text-center mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
           {isLogin ? "Welcome To Vault 🔒 " : "Create an Account"}
         </h2>
