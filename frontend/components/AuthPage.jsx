@@ -26,10 +26,10 @@ const AuthPage = ({ isLogin }) => {
       if (isLogin && res.data.token) {
         localStorage.setItem("token", res.data.token);
         toast.success("Login successful!");
-        setTimeout(() => navigate("/"), 1000);
+        navigate("/");
       } else {
         toast.success("Registration successful! Please log in.");
-        setTimeout(() => navigate("/login"), 1000);
+        navigate("/login")
       }
     } catch (err) {
       const message =
